@@ -1,0 +1,40 @@
+pipeline{
+	agant any
+	
+	environment{
+	IMAGE_NAME='JenkinsFile CICD'
+	VERSION="v${env.BUILD_NUMBER}"
+	REPO='devopshift-welcome'
+	CREDENTIALS_ID='docker-credentials'
+	}
+
+	stages{
+		stage('Build'){
+			script {
+				sh 'docker build--targetbuild--tag${IMAGE_NAME}:${VERSION}-build -f welcome/app/bookinfo/src/productpage/Dockerfile .'	
+			}
+		}
+	}
+
+
+	stage('Test'){
+		step {
+			script{
+				sh'docker build--targettest--tag${IMAGE_NAME}:${VERSION}-test.'
+                        	sh'docker run--rm${IMAGE_NAME}:${VERSION}-test'
+			}
+		}
+	}
+
+	stage('Push') {
+		steps{
+			script{
+				docker.withRegistry('https://index.docker.io/v1/',"${CREDENTIALS_ID}"){
+					sh 'docker push${REPO}/${IMAGE_NAME}:${VERSION}'
+					
+					}
+				}
+			}
+		}
+	}
+}
