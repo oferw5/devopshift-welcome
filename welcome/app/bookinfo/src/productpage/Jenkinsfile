@@ -1,5 +1,5 @@
 pipeline{
-	agant any
+	agent any
 	
 	environment{
 	WORKDIR='welcome/app/bookinfo/src/productpage'	
