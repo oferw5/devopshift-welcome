@@ -33,7 +33,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('', "${CREDENTIALS_ID}") {
-                        sh "docker push${REPO}/${IMAGE_NAME}:${VERSION}"
+                        sh "docker push ${REPO}/${IMAGE_NAME}:${VERSION}"
                     }
                 }
             }
