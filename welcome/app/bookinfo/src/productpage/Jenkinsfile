@@ -17,24 +17,24 @@ pipeline {
                 }
                 }
             }
-    }
 
-    stage('Test') {
-        steps {
-            script {
-                sh '''
+        stage('Test') {
+            steps {
+                script {
+                    sh '''
                 docker build --target test --tag ${IMAGE_NAME}:${VERSION}-test -f welcome/app/bookinfo/src/productpage/Dockerfile ${WORKDIR}
                 docker run --rm ${IMAGE_NAME}:${VERSION}-test
                 '''
+                }
             }
         }
-    }
 
-    stage('Push') {
-        steps {
-            script {
-                docker.withRegistry('', "${CREDENTIALS_ID}") {
-                    sh "docker push${REPO}/${IMAGE_NAME}:${VERSION}"
+        stage('Push') {
+            steps {
+                script {
+                    docker.withRegistry('', "${CREDENTIALS_ID}") {
+                        sh "docker push${REPO}/${IMAGE_NAME}:${VERSION}"
+                    }
                 }
             }
         }
