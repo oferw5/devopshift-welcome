@@ -33,7 +33,10 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('', "${CREDENTIALS_ID}") {
-                        sh "docker push ${REPO}/${IMAGE_NAME}:${VERSION}"
+                        sh '''
+                        docker build --target run --tag ${IMAGE_NAME}:${VERSION} -f welcome/app/bookinfo/src/productpage/Dockerfile ${WORKDIR}
+                        docker push ${REPO}/${IMAGE_NAME}:${VERSION}
+                        '''
                     }
                 }
             }
