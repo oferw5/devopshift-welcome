@@ -2,7 +2,7 @@ pipeline{
 	agant any
 	
 	environment{
-	WORKDIR='welcome\app\bookinfo\src\productpage'	
+	WORKDIR='welcome/app/bookinfo/src/productpage'	
 	IMAGE_NAME='project01'
 	VERSION="v${env.BUILD_NUMBER}"
 	REPO='ofer134679'
@@ -23,7 +23,7 @@ pipeline{
 			script{
 
 				sh ''' 
-				docker build --target test --tag ${IMAGE_NAME}:${VERSION}-test ${WORKDIR}
+				docker build --target test --tag ${IMAGE_NAME}:${VERSION}-test -f welcome/app/bookinfo/src/productpage/Dockerfile ${WORKDIR}
                 docker run --rm ${IMAGE_NAME}:${VERSION}-test
 				'''
 			}
