@@ -1,47 +1,42 @@
-pipeline{
-	agent any
-	
-	environment{
-	WORKDIR='welcome/app/bookinfo/src/productpage'	
-	IMAGE_NAME='project01'
-	VERSION="v${env.BUILD_NUMBER}"
-	REPO='ofer134679'
-	CREDENTIALS_ID='dockerhub'
-	}
+pipeline {
+    agent any
 
-	stages{
-			stage('Build'){
-				steps {
-				script {
-					sh "docker build --target build --tag ${IMAGE_NAME}:${VERSION}-build -f welcome/app/bookinfo/src/productpage/Dockerfile ${WORKDIR}"
+    environment {
+        WORKDIR = 'welcome/app/bookinfo/src/productpage'
+        IMAGE_NAME = 'project01'
+        VERSION = "v${env.BUILD_NUMBER}"
+        REPO = 'ofer134679'
+        CREDENTIALS_ID = 'dockerhub'
+    }
 
-				}
-			}
-		}
-	}
+    stages {
+            stage('Build') {
+                steps {
+                script {
+                    sh "docker build --target build --tag ${IMAGE_NAME}:${VERSION}-build -f welcome/app/bookinfo/src/productpage/Dockerfile ${WORKDIR}"
+                }
+                }
+            }
+    }
 
-
-	stage('Test'){
-		steps {
-			script{
-
-				sh ''' 
-				docker build --target test --tag ${IMAGE_NAME}:${VERSION}-test -f welcome/app/bookinfo/src/productpage/Dockerfile ${WORKDIR}
+    stage('Test') {
+        steps {
+            script {
+                sh '''
+                docker build --target test --tag ${IMAGE_NAME}:${VERSION}-test -f welcome/app/bookinfo/src/productpage/Dockerfile ${WORKDIR}
                 docker run --rm ${IMAGE_NAME}:${VERSION}-test
-				'''
-			}
-		}
-	}
+                '''
+            }
+        }
+    }
 
-
-	stage('Push') {
-		steps {
-			script{
-				docker.withRegistry('',"${CREDENTIALS_ID}"){
-					sh "docker push${REPO}/${IMAGE_NAME}:${VERSION}"
-					
-					}
-				}
-			}
-		}
-	}
+    stage('Push') {
+        steps {
+            script {
+                docker.withRegistry('', "${CREDENTIALS_ID}") {
+                    sh "docker push${REPO}/${IMAGE_NAME}:${VERSION}"
+                }
+            }
+        }
+    }
+}
