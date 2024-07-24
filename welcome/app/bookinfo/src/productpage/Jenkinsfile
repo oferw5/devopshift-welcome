@@ -35,6 +35,7 @@ pipeline {
                     docker.withRegistry('', "${CREDENTIALS_ID}") {
                         sh '''
                         docker build --target run --tag ${IMAGE_NAME}:${VERSION} -f welcome/app/bookinfo/src/productpage/Dockerfile ${WORKDIR}
+                        docker tag ${IMAGE_NAME}:${VERSION} ${IMAGE_NAME}:latest
                         docker push ${REPO}/${IMAGE_NAME}:${VERSION}
                         '''
                     }
