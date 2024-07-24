@@ -10,16 +10,19 @@ pipeline{
 	}
 
 	stages{
-		stage('Build'){
-			script {
-				sh "docker build --target build --tag ${IMAGE_NAME}:${VERSION}-build -f welcome/app/bookinfo/src/productpage/Dockerfile ${WORKDIR}"
+			stage('Build'){
+				steps {
+				script {
+					sh "docker build --target build --tag ${IMAGE_NAME}:${VERSION}-build -f welcome/app/bookinfo/src/productpage/Dockerfile ${WORKDIR}"
+
+				}
 			}
 		}
 	}
 
 
 	stage('Test'){
-		step {
+		steps {
 			script{
 
 				sh ''' 
@@ -32,7 +35,7 @@ pipeline{
 
 
 	stage('Push') {
-		steps{
+		steps {
 			script{
 				docker.withRegistry('',"${CREDENTIALS_ID}"){
 					sh "docker push${REPO}/${IMAGE_NAME}:${VERSION}"
