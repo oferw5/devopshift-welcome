@@ -219,7 +219,7 @@ You will now sign-in as _user-3_, who has been hired as your Amazon EC2 administ
 
 ![Shape1](RackMultipart20230730-1-ulob7o_html_e59097e6e774bae0.gif)
 
-## **Lab complete**
+## **Lab completed**
 
 Congratulations! You have completed the lab.
 
