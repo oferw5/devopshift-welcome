@@ -2,16 +2,17 @@ pipeline{
 	agant any
 	
 	environment{
-	IMAGE_NAME='JenkinsFile CICD'
+	WORKDIR='welcome\app\bookinfo\src\productpage'	
+	IMAGE_NAME='project01'
 	VERSION="v${env.BUILD_NUMBER}"
-	REPO='devopshift-welcome'
-	CREDENTIALS_ID='docker-credentials'
+	REPO='ofer134679'
+	CREDENTIALS_ID='dockerhub'
 	}
 
 	stages{
 		stage('Build'){
 			script {
-				sh 'docker build--targetbuild--tag${IMAGE_NAME}:${VERSION}-build -f welcome/app/bookinfo/src/productpage/Dockerfile .'	
+				sh "docker build --target build --tag ${IMAGE_NAME}:${VERSION}-build -f welcome/app/bookinfo/src/productpage/Dockerfile ${WORKDIR}"
 			}
 		}
 	}
@@ -20,17 +21,21 @@ pipeline{
 	stage('Test'){
 		step {
 			script{
-				sh'docker build--targettest--tag${IMAGE_NAME}:${VERSION}-test.'
-                        	sh'docker run--rm${IMAGE_NAME}:${VERSION}-test'
+
+				sh ''' 
+				docker build --target test --tag ${IMAGE_NAME}:${VERSION}-test ${WORKDIR}
+                docker run --rm ${IMAGE_NAME}:${VERSION}-test
+				'''
 			}
 		}
 	}
 
+
 	stage('Push') {
 		steps{
 			script{
-				docker.withRegistry('https://index.docker.io/v1/',"${CREDENTIALS_ID}"){
-					sh 'docker push${REPO}/${IMAGE_NAME}:${VERSION}'
+				docker.withRegistry('',"${CREDENTIALS_ID}"){
+					sh "docker push${REPO}/${IMAGE_NAME}:${VERSION}"
 					
 					}
 				}
